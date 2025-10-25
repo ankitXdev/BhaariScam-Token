@@ -94,9 +94,7 @@
 
 ```javascript
 const token = await ethers.getContractAt("BhaariScam", "0xContractAddress");
-
----
-## 5. Comparison with OpenZeppelin ERC-20
+### 5. Comparison with OpenZeppelin ERC-20
 
 | Feature | BhaariScam | OpenZeppelin ERC-20 |
 | :------- | :----------- | :----------------- |
@@ -108,14 +106,14 @@ const token = await ethers.getContractAt("BhaariScam", "0xContractAddress");
 
 ---
 
-## 6. Recommendations for Production Use
+### 6. Recommendations for Production Use
 
 - ✅ Use **OpenZeppelin’s ERC20** as a base (audited, secure).  
 - ✅ Add **SafeERC20** for all contract-to-contract transfers.  
 - ✅ Implement `increaseAllowance` / `decreaseAllowance` to prevent front-running.  
 - ✅ Add **Ownable** if minting/burning capabilities are needed.  
 - ✅ Emit events for all critical actions (e.g., `Mint`, `Burn`).  
-
+###
 ---
 
 ## 🧠 Final Notes
