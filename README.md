@@ -79,3 +79,30 @@ const token = await ethers.getContractAt("BhaariScam", "0xContractAddress");
 
 // Transfer 100 tokens
 await token.transfer("0xRecipientAddress", ethers.utils.parseEther("100"));
+
+---
+
+## 7. Comparison with OpenZeppelin ERC-20
+| Feature | BhaariScam | OpenZeppelin ERC-20 |
+| :--- | :--- | :--- |
+| **Gas Efficiency** | ✅ Highly optimized | Standard |
+| **String Storage** | ❌ `bytes32` (cheaper) | ✅ `string` (more readable) |
+| **Safe Transfers** | ❌ No `SafeERC20` | ✅ Built-in |
+| **Approval Security** | ❌ Original ERC-20 | ✅ `increaseAllowance` pattern |
+| **Extensibility** | ❌ Minimal | ✅ Modular (`Ownable`, `Pausable`) |
+
+---
+
+## 8. Recommendations for Production Use
+* Use **OpenZeppelin’s ERC20** as a base (audited, secure).
+* Add `SafeERC20` for all contract-to-contract transfers.
+* Implement `increaseAllowance` / `decreaseAllowance` to prevent front-running.
+* Add `Ownable` if minting/burning capabilities are needed.
+* Emit events for all critical actions (e.g., `Mint`, `Burn`).
+
+---
+
+## 🧠 Final Notes
+* **Educational Value:** Great for learning gas optimizations and storage patterns.
+* **Production Readiness:** Not recommended without addressing security gaps.
+* **Alternative:** Extend OpenZeppelin’s `ERC20` for production-ready tokens.
