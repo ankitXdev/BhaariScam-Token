@@ -66,27 +66,38 @@ This contract is **for educational purposes only** and demonstrates extreme gas 
 
 ## **📂 Project Structure**
 
-## 🌐 Deployment
 
-### Sepolia Testnet
-| Item               | Details                                                                                     |
-|--------------------|---------------------------------------------------------------------------------------------|
-| **Contract**       | [`0x959f490eab1fc1c80713c6f7b9f543b72076bed9`](https://sepolia.etherscan.io/address/0x959f490eab1fc1c80713c6f7b9f543b72076bed9) |
-| **Token Tracker**   | [Etherscan Token Page](https://sepolia.etherscan.io/token/0x959f490eab1fc1c80713c6f7b9f543b72076bed9) |
-| **Verification**   | ✅ [Verified Source](https://sepolia.etherscan.io/address/0x959f490eab1fc1c80713c6f7b9f543b72076bed9#code) |
-| **Initial Supply**  | 10,000 `SCAM` (18 decimals)                                                                   |
+---
 
-### How to Interact
-1. **Add Token to Wallet**:
-   - **Token Contract Address**: `0x959f490eab1fc1c80713c6f7b9f543b72076bed9`
-   - **Symbol**: `SCAM`
-   - **Decimals**: `18`
+## **🔧 How to Use**
+### **1. Remix IDE**
+1. **Open Remix**: [https://remix.ethereum.org](https://remix.ethereum.org).
+2. **Import `BhaariScam.sol`** and compile with Solidity `^0.8.20` (enable optimization).
+3. **Deploy**:
+   - Select **Injected Web3** (MetaMask) or **Remix VM**.
+   - Input `10000` for `initialSupply`.
+4. **Interact**:
+   - Call `transfer(to, amount)` or `approve(spender, amount)`.
+   - **Note**: Amounts are in **wei** (e.g., `1000000000000000000` = 1 token).
 
-2. **Test Transactions**:
-   ```javascript
-   // Using ethers.js
-   const token = await ethers.getContractAt(
-     "BhaariScam",
-     "0x959f490eab1fc1c80713c6f7b9f543b72076bed9"
-   );
-   await token.transfer("0xRecipientAddress", ethers.utils.parseEther("100"));
+### **2. ethers.js Example**
+```javascript
+const { ethers } = require("ethers");
+
+const tokenAddress = "0x959f490eab1fc1c80713c6f7b9f543b72076bed9";
+const abi = [ /* Paste ABI from `scenario.json` */ ];
+
+async function interact() {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const token = new ethers.Contract(tokenAddress, abi, signer);
+
+  // Transfer 100 tokens (100 * 10^18)
+  const tx = await token.transfer(
+    "0xRecipientAddress",
+    ethers.utils.parseEther("100")
+  );
+  await tx.wait();
+  console.log("Transfer successful!");
+}
+
