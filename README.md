@@ -1,12 +1,70 @@
-📘 BhaariScam TokenA gas-optimized ERC-20 token for educational purposes.OverviewBhaariScam is a highly gas-optimized ERC-20 token contract designed to demonstrate advanced Solidity techniques. It avoids expensive operations (e.g., string storage, redundant SSTOREs) while maintaining core ERC-20 functionality.⚠️ Educational FocusThis contract is for learning and demonstration purposes only.Not audited for production use.Lacks SafeERC20 checks for contract interactions.Intentionally named “Scam” to emphasize its educational (and non-malicious) intent.✅ Key FeaturesGas OptimizationsUses bytes32 for name and symbol (cheaper than string).Avoids the 22,100-gas penalty for zero-to-non-zero storage writes.Minimizes storage reads/writes via cached references and conditional updates.Standard ERC-20 ComplianceImplements: transfer, transferFrom, approve, balanceOf, totalSupply.Emits: Transfer, Approval events.SecurityNo reentrancy risks (no external calls in state-changing functions).Input validation (e.g., zero-address checks).🔐 Contract DetailsStorage Layout (Optimized)VariableTypeDescription_namebytes32private constant Token name in hex ("Bhaari Scam")_symbolbytes32private constant Token symbol in hex ("SCAM")_decimalsuint256private constant Fixed to 18 (standard ERC-20 decimals)totalSupplyuint256public Total token supply_accountsmapping(address => Account)Tracks balances and allowances per address🧱 Account StructSoliditystruct Account {
-    uint256 balance;
-    mapping(address => uint256) allowances;
-}
-Functions🔧 Core Functionsconstructor(uint256 initialSupply)Mints initialSupply * 10^18 to the deployer.Gas tricks: avoids zero-to-non-zero penalty, uses a storage pointer.Emits Transfer(address(0), msg.sender, initialAmount).transfer(address to, uint256 value)Splits require statements for cheaper checks.Caches sender and recipient storage references.Deletes the balance from storage if it's fully transferred (gas refund).transferFrom(address from, address to, uint256 value)Caches only necessary storage references.Accesses allowance mapping directly.Deletes zeroed allowances (gas refund).approve(address spender, uint256 value)Not protected against the common approval front-running vector.Avoids unnecessary storage reads if the value is unchanged.👁 View FunctionsFunctionReturnsOptimization Detailsname()stringConverts bytes32 to string on-the-fly.symbol()stringSame as name().decimals()uint256Returns the constant 18.balanceOf()uint256Direct mapping read.🧰 Internal Helper_bytes32ToString(bytes32 data)Converts bytes32 to an in-memory string.Dynamically calculates the string length to avoid trailing null bytes.Copies only non-zero bytes.Gas Optimizations BreakdownTechniqueExampleGas Savedbytes32 for strings_name = "0x426861617269205363616d"~20k (on deployment)Avoid zero-to-non-zero writeaccount.balance = 1; account.balance = amount;~17,100Cached storage referencesAccount storage sender = _accounts[msg.sender];~100 per accessSplit require statementsrequire(to != 0); require(value != 0);~3 per conditionConditional deleteif (balance == value) delete sender.balance;~5k (gas refund)Minimal storage updatesUpdate only if value != allowanceValue~5kSecurity Analysis✅ Mitigated RisksReentrancy: No external calls exist in state-changing functions.Overflow/Underflow: Handled natively by Solidity ^0.8.20.Front-Running: Not applicable (no time-sensitive logic like in a DEX).⚠ Potential Risks (Educational Gaps)RiskIssueSuggested FixNo SafeERC20No check if a recipient contract can handle ERC-20 tokens.Use OpenZeppelin’s SafeERC20 library or transfer hooks.Approval Front-RunningVulnerable approve logic.Use increaseAllowance and decreaseAllowance patterns.No Access ControlAnyone can call transfer/approve (as intended).Add Ownable if mint/burn functions were to be added.No Paused/BlacklistTokens can't be frozen/recovered if stolen.Add Pausable or Blacklist (adds centralization).6. Deployment & Interaction🛠 Remix DeploymentCompile: Use Solidity ^0.8.20 with optimization enabled (e.g., 200 runs).Deploy: Input an initialSupply (e.g., 1000 will mint 1000 * 10^18 tokens).Interact: Use transfer(to, amount) or approve(spender, amount). Note that amounts should be in wei (e.g., 1000000000000000000 for 1 token).💻 Example (ethers.js)JavaScriptconst token = await ethers.getContractAt("BhaariScam", "0xContractAddress");
+# BhaariScam Token
+*A gas-optimized ERC-20 token for Solidity learning*
 
-// Transfer 100 tokens
-await token.transfer("0xRecipientAddress", ethers.utils.parseEther("100"));
-7. Comparison with OpenZeppelin ERC-20FeatureBhaariScamOpenZeppelin ERC-20Gas Efficiency✅ Highly optimizedStandardString Storage❌ bytes32 (cheaper)✅ string (more readable)Safe Transfers❌ No SafeERC20✅ Built-inApproval Security❌ Original ERC-20✅ increaseAllowance patternExtensibility❌ Minimal✅ Modular (Ownable, Pausable)8. Recommendations for Production UseUse OpenZeppelin’s ERC20 as a base (audited, secure).Add SafeERC20 for all contract-to-contract transfers.Implement increaseAllowance / decreaseAllowance to prevent front-running.Add Ownable if minting/burning capabilities are needed.Emit events for all critical actions (e.g., Mint, Burn).🧠 Final NotesEducational Value: Great for learning gas optimizations and storage patterns.Production Readiness: Not recommended without addressing security gaps.Alternative: Extend OpenZeppelin’s ERC20 for production-ready tokens.
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+[![Sepolia Testnet](https://img.shields.io/badge/Network-Sepolia-blue)](https://sepolia.etherscan.io/token/0x959f490eab1fc1c80713c6f7b9f543b72076bed9)
+
+---
+
+## **⚠️ Disclaimer**
+This contract is **for educational purposes only** and demonstrates extreme gas optimizations. It is **not audited** and lacks production-grade safeguards (e.g., `SafeERC20`). **Do not use in production**.
+
+---
+
+## **📌 Overview**
+**BhaariScam** is a **highly gas-optimized** ERC-20 token designed to teach advanced Solidity techniques:
+- **Storage efficiency**: Uses `bytes32` for `name`/`symbol` (cheaper than `string`).
+- **Gas-saving tricks**: Avoids zero-to-non-zero storage writes, caches storage reads, and minimizes redundant operations.
+- **Standard ERC-20**: Implements `transfer`, `approve`, `transferFrom`, and metadata functions.
+
+---
+
+## **🔗 Deployed Contract**
+| **Network**  | **Contract Address**                                   | **Etherscan**                          |
+|--------------|-------------------------------------------------------|----------------------------------------|
+| Sepolia      | [`0x959f490eab1fc1c80713c6f7b9f543b72076bed9`](https://sepolia.etherscan.io/address/0x959f490eab1fc1c80713c6f7b9f543b72076bed9) | [View Token](https://sepolia.etherscan.io/token/0x959f490eab1fc1c80713c6f7b9f543b72076bed9) |
+
+### **Deployment Details**
+- **Initial Supply**: `10,000 SCAM` (18 decimals).
+- **Deployer Address**: [`0x266Ec89eB84Ad1Fe161d2748c1dCf3979B2Db2fD`](https://sepolia.etherscan.io/address/0x266Ec89eB84Ad1Fe161d2748c1dCf3979B2Db2fD) (Remix `account{0}`).
+- **Constructor Input**: `10000` (mints `10,000 * 10^18` tokens).
+- **Verification**: [Verified Source Code](https://sepolia.etherscan.io/address/0x959f490eab1fc1c80713c6f7b9f543b72076bed9#code).
+
+---
+
+## **🛠 Key Features**
+### **Gas Optimizations**
+| **Technique**               | **Example**                          | **Gas Saved**               |
+|-----------------------------|--------------------------------------|-----------------------------|
+| `bytes32` for strings       | `_name = "0x426861617269205363616d"` | ~20k vs. `string` storage   |
+| Avoid zero-to-non-zero writes | `account.balance = 1` before update  | 17,100 gas penalty avoided  |
+| Cached storage references    | `Account storage sender = _accounts[msg.sender]` | ~100 gas per access |
+| Split `require` statements   | `require(to != 0); require(value != 0)` | ~3 gas per check |
+| Conditional `delete`        | `if (balance == value) delete sender.balance` | ~5k gas refund |
+
+### **ERC-20 Compliance**
+- **Functions**: `transfer`, `approve`, `transferFrom`, `balanceOf`, `totalSupply`.
+- **Events**: `Transfer`, `Approval`.
+- **Metadata**: `name()`, `symbol()`, `decimals()` (hardcoded to `18`).
+
+---
+
+## **🚨 Security Notes**
+### **✅ Mitigated Risks**
+- **Reentrancy**: No external calls in state-changing functions.
+- **Overflow/Underflow**: Handled by Solidity `^0.8.20`.
+- **Zero-Address Checks**: Validates `to` and `spender` in `transfer`/`approve`.
+
+### **⚠️ Educational Gaps**
+| **Risk**               | **Issue**                              | **Suggested Fix**                     |
+|------------------------|----------------------------------------|---------------------------------------|
+| No `SafeERC20`         | Transfers to contracts may fail.       | Use OpenZeppelin’s `SafeERC20`.       |
+| Approval Front-Running | Vulnerable to race conditions.         | Use `increaseAllowance`/`decreaseAllowance`. |
+| No Access Control      | Anyone can call `transfer`/`approve`.   | Add `Ownable` for admin functions.    |
+
+---
+
+## **📂 Project Structure**
 
 ## 🌐 Deployment
 
