@@ -152,3 +152,28 @@ Educational Value: Great for learning gas optimizations and storage patterns
 Production Readiness: Not recommended without addressing security gaps
 
 Alternative: Extend OpenZeppelin’s ERC20 for production-ready tokens
+
+## 🌐 Deployment
+
+### Sepolia Testnet
+| Item               | Details                                                                                     |
+|--------------------|---------------------------------------------------------------------------------------------|
+| **Contract**       | [`0x959f490eab1fc1c80713c6f7b9f543b72076bed9`](https://sepolia.etherscan.io/address/0x959f490eab1fc1c80713c6f7b9f543b72076bed9) |
+| **Token Tracker**   | [Etherscan Token Page](https://sepolia.etherscan.io/token/0x959f490eab1fc1c80713c6f7b9f543b72076bed9) |
+| **Verification**   | ✅ [Verified Source](https://sepolia.etherscan.io/address/0x959f490eab1fc1c80713c6f7b9f543b72076bed9#code) |
+| **Initial Supply**  | 10,000 `SCAM` (18 decimals)                                                                   |
+
+### How to Interact
+1. **Add Token to Wallet**:
+   - **Token Contract Address**: `0x959f490eab1fc1c80713c6f7b9f543b72076bed9`
+   - **Symbol**: `SCAM`
+   - **Decimals**: `18`
+
+2. **Test Transactions**:
+   ```javascript
+   // Using ethers.js
+   const token = await ethers.getContractAt(
+     "BhaariScam",
+     "0x959f490eab1fc1c80713c6f7b9f543b72076bed9"
+   );
+   await token.transfer("0xRecipientAddress", ethers.utils.parseEther("100"));
