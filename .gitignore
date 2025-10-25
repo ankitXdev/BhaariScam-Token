@@ -1,0 +1,41 @@
+# Remix IDE
+.remix/
+remix-state.json
+remix-config.json
+*.remix
+
+# Node.js/TypeScript
+node_modules/
+dist/
+build/
+*.tsbuildinfo
+*.js.map
+*.d.ts
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Hardhat/Foundry (if used later)
+cache/
+artifacts/
+broadcast/
+typechain-types/
+
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+
+# Logs and temporary files
+logs/
+*.log
+*.tmp
+.DS_Store
+
+# Solidity
+*.sol.js
+*.sol.json
+# Ignore Remix-generated files (e.g., from compilation)
+contracts/artifacts/
