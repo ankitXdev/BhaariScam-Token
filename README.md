@@ -1,4 +1,4 @@
-# BhaariScam Token — Technical Documentation
+#🪙 BhaariScam Token — Technical Documentation
 
 ## 1. Overview
 
